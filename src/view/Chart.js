@@ -80,7 +80,9 @@ Chart.prototype = {
     highlight: function (seriesModel, ecModel, api, payload) {
         toggleHighlight(seriesModel.getData(), payload, 'emphasis');
     },
-
+    blink: function (seriesModel, ecModel, api, payload) {
+        toggleHighlight(seriesModel.getData(), payload, 'blink');
+    },
     /**
      * Downplay series or specified data item.
      * @param  {module:echarts/model/Series} seriesModel
@@ -170,15 +172,15 @@ chartProto.updateVisual =
  * @param {string} state 'normal'|'emphasis'
  * @param {number} highlightDigit
  */
-function elSetState(el, state, highlightDigit) {
+function elSetState(el, state, highlightDigit, payload) {
     if (el) {
-        el.trigger(state, highlightDigit);
+        el.trigger(state, highlightDigit, payload);
         if (el.isGroup
             // Simple optimize.
             && !graphicUtil.isHighDownDispatcher(el)
         ) {
             for (var i = 0, len = el.childCount(); i < len; i++) {
-                elSetState(el.childAt(i), state, highlightDigit);
+                elSetState(el.childAt(i), state, highlightDigit, payload);
             }
         }
     }
@@ -198,12 +200,12 @@ function toggleHighlight(data, payload, state) {
 
     if (dataIndex != null) {
         each(modelUtil.normalizeToArray(dataIndex), function (dataIdx) {
-            elSetState(data.getItemGraphicEl(dataIdx), state, highlightDigit);
+            elSetState(data.getItemGraphicEl(dataIdx), state, highlightDigit, payload);
         });
     }
     else {
         data.eachItemGraphicEl(function (el) {
-            elSetState(el, state, highlightDigit);
+            elSetState(el, state, highlightDigit, payload);
         });
     }
 }

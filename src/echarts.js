@@ -1264,7 +1264,7 @@ function doDispatchAction(payload, silent) {
 
     var eventObjBatch = [];
     var eventObj;
-    var isHighDown = payloadType === 'highlight' || payloadType === 'downplay';
+    var isHighDown = payloadType === 'highlight' || payloadType === 'downplay' || payloadType === 'blink';
 
     each(payloads, function (batchItem) {
         // Action can specify the event by return it.
@@ -2432,6 +2432,13 @@ registerAction({
     type: 'highlight',
     event: 'highlight',
     update: 'highlight'
+}, zrUtil.noop);
+
+
+registerAction({
+    type: 'blink',
+    event: 'blink',
+    update: 'blink'
 }, zrUtil.noop);
 
 registerAction({

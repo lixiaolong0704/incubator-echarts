@@ -324,7 +324,13 @@ function cacheElementStl(el) {
     normalStyle.stroke = elStyle.stroke;
 }
 
-function singleEnterEmphasis(el) {
+function singleEnterEmphasis(el, playload) {
+    if (el.blink) {
+        if (playload && playload.type === 'blink') {
+        } else {
+            return;
+        }
+    }
     var hoverStl = el.__hoverStl;
 
     if (!hoverStl || el.__highlighted) {
@@ -492,23 +498,32 @@ export function setElementHoverStyle(el, hoverStl) {
     }
 }
 
-function onElementMouseOver(e) {
+function onElementMouseOver(e, b, c) {
     !shouldSilent(this, e)
         // "emphasis" event highlight has higher priority than mouse highlight.
         && !this.__highByOuter
         && traverseUpdate(this, singleEnterEmphasis);
 }
 
-function onElementMouseOut(e) {
+function onElementMouseOut(e, b, c) {
     !shouldSilent(this, e)
         // "emphasis" event highlight has higher priority than mouse highlight.
         && !this.__highByOuter
         && traverseUpdate(this, singleEnterNormal);
 }
-
-function onElementEmphasisEvent(highlightDigit) {
+// todo sunleibo
+function onElementEmphasisEvent(highlightDigit, playload) {
     this.__highByOuter |= 1 << (highlightDigit || 0);
-    traverseUpdate(this, singleEnterEmphasis);
+    if (playload && playload.type === 'blink') {
+        if (playload.blink) {
+            traverseUpdate(this, singleEnterEmphasis, playload);
+        } else {
+            traverseUpdate(this, singleEnterNormal);
+        }
+    } else {
+        traverseUpdate(this, singleEnterEmphasis, playload);
+    }
+
 }
 
 function onElementNormalEvent(highlightDigit) {
@@ -1071,7 +1086,8 @@ function rollbackDefaultTextStyle(style) {
 }
 
 export function getFont(opt, ecModel) {
-    var gTextStyleModel = ecModel && ecModel.getModel('textStyle');
+    // ecModel or default text style model.
+    var gTextStyleModel = ecModel || ecModel.getModel('textStyle');
     return zrUtil.trim([
         // FIXME in node-canvas fontWeight is before fontStyle
         opt.fontStyle || gTextStyleModel && gTextStyleModel.getShallow('fontStyle') || '',
@@ -1331,8 +1347,8 @@ export function createIcon(iconStr, opt, rect) {
         return iconStr.indexOf('image://') === 0
             ? (
                 style.image = iconStr.slice(8),
-                zrUtil.defaults(style, rect),
-                new ZImage(opt)
+                    zrUtil.defaults(style, rect),
+                    new ZImage(opt)
             )
             : (
                 makePath(

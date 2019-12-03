@@ -75,7 +75,7 @@ symbolProto._createSymbol = function (
     this.removeAll();
 
     var color = data.getItemVisual(idx, 'color');
-
+    this.blink = data.getItemModel(idx).get('blink')
     // var symbolPath = createSymbol(
     //     symbolType, -0.5, -0.5, 1, 1, color
     // );
@@ -131,8 +131,8 @@ symbolProto.getScale = function () {
 /**
  * Highlight symbol
  */
-symbolProto.highlight = function () {
-    this.childAt(0).trigger('emphasis');
+symbolProto.highlight = function (a) {
+    this.childAt(0).trigger('emphasis', null, a);
 };
 
 /**
@@ -335,7 +335,7 @@ symbolProto._updateCommon = function (data, idx, symbolSize, seriesScope) {
     symbolPath.highDownOnUpdate = (
         hoverAnimation && seriesModel.isAnimationEnabled()
     ) ? highDownOnUpdate : null;
-
+    symbolPath.blink = data.getItemModel().get('blink')
     graphic.setHoverStyle(symbolPath);
 };
 

@@ -481,6 +481,7 @@ require([
                     //     return val[2] / 10;
                     // },
                     symbolSize: 30,
+                    blink: true, // custom prop
                     emphasis: {
                         itemStyle: {
                             opacity: 1,
@@ -509,15 +510,43 @@ require([
         }
         chart.setOption(o);
         chart.dispatchAction({
-            type: 'highlight',
+            type: 'blink',
             // 系列的 index，在 tooltip 的 trigger 为 axis 的时候可选。
             seriesIndex: 0,
             // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
             dataIndex: 1,
             symbolSize: 10,
+            blink: true,
             tooltipOption: {
                 symbolSize: 10
             }
         })
+
+        setTimeout(()=>{
+            chart.dispatchAction({
+                type: 'blink',
+                // 系列的 index，在 tooltip 的 trigger 为 axis 的时候可选。
+                seriesIndex: 0,
+                // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
+                dataIndex: 1,
+                symbolSize: 10,
+                blink: false,
+                tooltipOption: {
+                    symbolSize: 10
+                }
+            })
+            chart.dispatchAction({
+                type: 'blink',
+                // 系列的 index，在 tooltip 的 trigger 为 axis 的时候可选。
+                seriesIndex: 0,
+                // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
+                dataIndex: 3,
+                symbolSize: 10,
+                blink: true,
+                tooltipOption: {
+                    symbolSize: 10
+                }
+            })
+        },2000)
     });
 });

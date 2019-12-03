@@ -142,8 +142,8 @@ effectSymbolProto.updateEffectAnimation = function (effectCfg) {
 /**
  * Highlight symbol
  */
-effectSymbolProto.highlight = function () {
-    this.trigger('emphasis');
+effectSymbolProto.highlight = function (a) {
+    this.trigger('emphasis', null, a);
 };
 
 /**
@@ -186,7 +186,9 @@ effectSymbolProto.updateData = function (data, idx) {
     rippleGroup.rotation = (itemModel.getShallow('symbolRotate') || 0) * Math.PI / 180 || 0;
 
     var effectCfg = {};
-
+    let opacity = seriesModel.get('itemStyle.opacity');
+    let blink = seriesModel.get('blink');
+    // console.log(blink)
     effectCfg.showEffectOn = seriesModel.get('showEffectOn');
     effectCfg.rippleScale = itemModel.get('rippleEffect.scale');
     effectCfg.brushType = itemModel.get('rippleEffect.brushType');
@@ -212,23 +214,41 @@ effectSymbolProto.updateData = function (data, idx) {
         this._effectCfg = null;
 
         this.stopEffectAnimation();
-        var symbol = this.childAt(0);
-        var onEmphasis = function () {
-            symbol.highlight();
-            if (effectCfg.showEffectOn !== 'render') {
-                this.startEffectAnimation(effectCfg);
+        let symbol = this.childAt(0);
+        let onEmphasis = function (a, b, c) {
+            if (!blink) {
+                symbol.highlight();
+                if (effectCfg.showEffectOn !== 'render') {
+                    this.startEffectAnimation(effectCfg);
+                }
             }
         };
-        var onNormal = function () {
-            symbol.downplay();
-            if (effectCfg.showEffectOn !== 'render') {
-                this.stopEffectAnimation();
+        let onNormal = function () {
+            if (!blink) {
+                symbol.downplay();
+                if (effectCfg.showEffectOn !== 'render') {
+                    this.stopEffectAnimation();
+                }
             }
         };
+        let onBlink = function (a, b, c) {
+            if (b.blink) {
+                symbol.highlight(b);
+                if (effectCfg.showEffectOn !== 'render') {
+                    this.startEffectAnimation(effectCfg);
+                }
+            } else {
+                symbol.downplay();
+                if (effectCfg.showEffectOn !== 'render') {
+                    this.stopEffectAnimation();
+                }
+            }
+        }
         this.on('mouseover', onEmphasis, this)
             .on('mouseout', onNormal, this)
             .on('emphasis', onEmphasis, this)
-            .on('normal', onNormal, this);
+            .on('normal', onNormal, this)
+            .on('blink', onBlink, this);
     }
 
     this._effectCfg = effectCfg;
