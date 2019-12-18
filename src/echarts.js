@@ -810,7 +810,7 @@ echartsProto.getViewOfComponentModel = function (componentModel) {
 echartsProto.getViewOfSeriesModel = function (seriesModel) {
     return this._chartsMap[seriesModel.__viewId];
 };
-
+// alert('...')
 var updateMethods = {
 
     prepareAndUpdate: function (payload) {

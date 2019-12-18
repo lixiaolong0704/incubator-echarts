@@ -859,9 +859,14 @@ function renderNode(
 
         normalStyle.truncate = (isShow && normalLabelModel.get('ellipsis'))
             ? {
+                // outerWidth: width + 10,
+                // outerHeight: height + 10,
                 outerWidth: width,
                 outerHeight: height,
-                minChar: 2
+                maxIterations: 1,
+                minChar: 2,
+                ellipsis: '...',
+                placeholder: '-'
             }
             : null;
     }

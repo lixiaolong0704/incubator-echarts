@@ -28,13 +28,30 @@ under the License.
         <script src="lib/facePrint.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="lib/reset.css">
+        <style>
+            .hideTip {
+                display: none;
+            }
+
+            .tipname {
+                position: absolute;
+                background: rgba(0, 0, 0, 0.5);
+                border-radius: 5px;
+                max-width: 400px;
+                padding: 5px;
+                z-index: 100;
+                color: #fff;
+            }
+        </style>
     </head>
     <body>
         <style>
             #main {
                 height: 500px;
+                margin-top:100px;
             }
         </style>
+        <div id="tip" class="tipname hideTip"></div>
         <div id="main"></div>
         <script>
 
@@ -106,6 +123,7 @@ under the License.
                     calculable: true,
                     xAxis: [{
                         type: 'category',
+                        triggerEvent:true,
                         axisLabel:{
                             formatter:function(value){
 
@@ -119,6 +137,7 @@ under the License.
                         }],
                     yAxis: [{
                         type: 'value',
+                        triggerEvent:true,
                         axisLabel: {
                             formatter: '{value} °C'
                         }
@@ -165,7 +184,23 @@ under the License.
                     }]
                 };
 
-                chart.setOption(option);
+
+              chart.on('mouseover', function (params) {
+                console.log(params)
+                if (params.componentType === 'yAxis') {
+                  var tt = $('#tip')
+                  tt.html(params.value)
+                  console.log('x=' + params.event.event.layerX + '  ---' + 'y=' + params.event.event.layerY)
+                  tt.css('left', params.event.event.clientX + 10)
+                  tt.css('top', params.event.event.clientY + 0)
+                  console.log(tt.css('left'))
+                  tt.show()
+                }
+              })
+              chart.setOption(option);
+              // chart.on('mouseout', function (params) {
+              //   $('#tip').hide()
+              // })
             });
 
         </script>

@@ -97,7 +97,8 @@ export default SeriesModel.extend({
             show: true,
             // Do not use textDistance, for ellipsis rect just the same as treemap node rect.
             distance: 0,
-            padding: 5,
+            // padding: 5,
+            padding: 0,
             position: 'inside', // Can be [5, '5%'] or position stirng like 'insideTopLeft', ...
             // formatter: null,
             color: '#fff',
