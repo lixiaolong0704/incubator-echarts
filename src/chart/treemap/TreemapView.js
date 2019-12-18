@@ -865,7 +865,7 @@ function renderNode(
                 outerHeight: height,
                 maxIterations: 1,
                 minChar: 2,
-                ellipsis: '...',
+                ellipsis: '',
                 placeholder: '-'
             }
             : null;
