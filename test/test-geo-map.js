@@ -521,32 +521,43 @@ require([
                 symbolSize: 10
             }
         })
+        var prevIdx = 1
+        const next = () =>{
+            setTimeout(()=>{
+                chart.dispatchAction({
+                    type: 'blink',
+                    // 系列的 index，在 tooltip 的 trigger 为 axis 的时候可选。
+                    seriesIndex: 0,
+                    // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
+                    dataIndex: prevIdx,
+                    symbolSize: 10,
+                    blink: false,
+                    tooltipOption: {
+                        symbolSize: 10
+                    }
+                })
+                console.log("set...")
+                chart.setOption({
+                    series: o.series
+                });
+                // debugger
+                prevIdx = 3
+                chart.dispatchAction({
+                    type: 'blink',
+                    // 系列的 index，在 tooltip 的 trigger 为 axis 的时候可选。
+                    seriesIndex: 0,
+                    // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
+                    dataIndex: prevIdx,
+                    symbolSize: 10,
+                    blink: true,
+                    tooltipOption: {
+                        symbolSize: 10
+                    }
+                })
+                next()
+            },1000)
+        }
+        next()
 
-        setTimeout(()=>{
-            chart.dispatchAction({
-                type: 'blink',
-                // 系列的 index，在 tooltip 的 trigger 为 axis 的时候可选。
-                seriesIndex: 0,
-                // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
-                dataIndex: 1,
-                symbolSize: 10,
-                blink: false,
-                tooltipOption: {
-                    symbolSize: 10
-                }
-            })
-            chart.dispatchAction({
-                type: 'blink',
-                // 系列的 index，在 tooltip 的 trigger 为 axis 的时候可选。
-                seriesIndex: 0,
-                // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
-                dataIndex: 3,
-                symbolSize: 10,
-                blink: true,
-                tooltipOption: {
-                    symbolSize: 10
-                }
-            })
-        },2000)
     });
 });

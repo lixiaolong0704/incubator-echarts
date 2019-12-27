@@ -65488,7 +65488,7 @@ effectSymbolProto.updateData = function (data, idx) {
     effectCfg.color = color;
     effectCfg.rippleEffectColor = itemModel.get('rippleEffect.color');
 
-    this.off('mouseover').off('mouseout').off('emphasis').off('normal');
+    this.off('mouseover').off('mouseout').off('emphasis').off('normal').off('blink');
 
     if (effectCfg.showEffectOn === 'render') {
         this._effectCfg
@@ -65523,6 +65523,7 @@ effectSymbolProto.updateData = function (data, idx) {
             if (b.blink) {
                 symbol.highlight(b);
                 if (effectCfg.showEffectOn !== 'render') {
+                    console.log("....");
                     this.startEffectAnimation(effectCfg);
                 }
             } else {
@@ -65543,7 +65544,7 @@ effectSymbolProto.updateData = function (data, idx) {
 };
 
 effectSymbolProto.fadeOut = function (cb) {
-    this.off('mouseover').off('mouseout').off('emphasis').off('normal');
+    this.off('mouseover').off('mouseout').off('emphasis').off('normal').off('blink');
     cb && cb();
 };
 
